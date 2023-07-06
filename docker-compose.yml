@@ -10,10 +10,11 @@ services:
     ports:
         - 8080:8080
     environment:
-        - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresqldb:5432/openaiDB
-        - SPRING_DATASOURCE_USERNAME=postgres
-        - SPRING_DATASOURCE_PASSWORD=2019
-        - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresqldb:5432/openaiDB
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=2019
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
 
   postgresqldb:
     image: 'postgres'
