@@ -24,3 +24,14 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=2019
+      - POSTGRES_DB=openaiDB
+
+  angular:
+    image: 'node:latest'
+    container_name: angular
+    volumes:
+      - ./angular:/app
+    working_dir: /app/openaifront/openaifront
+    ports:
+      - 4200:4200
+    command: npm start

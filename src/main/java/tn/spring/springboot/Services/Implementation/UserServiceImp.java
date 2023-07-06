@@ -3,6 +3,8 @@ package tn.spring.springboot.Services.Implementation;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import tn.spring.springboot.Services.Interfaces.IServiceUser;
 import tn.spring.springboot.entities.User;
@@ -23,6 +25,12 @@ public class UserServiceImp implements IServiceUser {
  @Override
  public List<User> getAllUsers() {
   return userRepository.findAll();
+ }
+
+ @Override
+ public Page<User> getAllUsers(int offset, int pageSize) {
+  Page<User> users = userRepository.findAll(PageRequest.of(offset,pageSize)) ;
+  return users;
  }
 
  @Override
