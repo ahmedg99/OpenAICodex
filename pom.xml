@@ -11,8 +11,8 @@
     <groupId>tn.spring</groupId>
     <artifactId>spring-boot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Spring-boot</name>
-    <description>Spring-boot</description>
+    <name>openaiTest</name>
+    <description>openaiTest</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
