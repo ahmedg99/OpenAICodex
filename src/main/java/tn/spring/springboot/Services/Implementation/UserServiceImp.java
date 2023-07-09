@@ -44,7 +44,7 @@ public class UserServiceImp implements IServiceUser , UserDetailsService {
    log.error("username not found in the datatbase");
    throw new UsernameNotFoundException("username not found in the datatbase") ;
   } else {
-   log.error("username is found in the  datatbase");
+   log.info("username is found in the  datatbase");
   }
   Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
   user.getRoles().forEach(role -> {
