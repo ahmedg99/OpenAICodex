@@ -17,7 +17,7 @@ public interface IServiceUser {
     Role saveRole(Role role ) ;
     User updateUser(int id , User user ) ;
     void addRoleToUser(String username , String roleName ) ;
-
+    User getUser(String username) ;
 
 
 }

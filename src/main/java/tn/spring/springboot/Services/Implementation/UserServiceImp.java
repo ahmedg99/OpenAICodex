@@ -96,4 +96,9 @@ public class UserServiceImp implements IServiceUser , UserDetailsService {
   user.getRoles().add(role) ;
   userRepository.save(user);
  }
+
+ @Override
+ public User getUser(String username) {
+  return userRepository.findUserByUsername(username);
+ }
 }
