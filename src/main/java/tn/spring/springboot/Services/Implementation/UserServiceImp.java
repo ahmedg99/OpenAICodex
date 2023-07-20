@@ -1,6 +1,10 @@
 package tn.spring.springboot.Services.Implementation;
 
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -125,4 +129,34 @@ public class UserServiceImp implements IServiceUser , UserDetailsService {
  public User getUser(String username) {
   return userRepository.findUserByUsername(username);
  }
+
+
+
+ public String getusernamefromtoken(String header)
+ {
+  String username="" ;
+  String authorizationHeader = header ;
+  if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+   try {
+    String token = authorizationHeader.substring("Bearer ".length());
+    Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+    JWTVerifier verifier = JWT.require(algorithm).build();
+    DecodedJWT decodedJWT = verifier.verify(token);
+    username = decodedJWT.getSubject();
+
+    String[] roles = decodedJWT.getClaim("role").asArray(String.class); // to remove if it doesn't break anything
+
+   }
+   catch (Exception exception) {
+    log.error("Error getting username in : {}", exception.getMessage());
+
+   }
+
+  }
+
+  return (username);
+ }
+
+
+
 }

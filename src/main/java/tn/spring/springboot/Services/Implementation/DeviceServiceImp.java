@@ -31,13 +31,17 @@ import java.util.List;
 @Slf4j
 public class DeviceServiceImp implements IServiceDevice {
  DeviceRepository deviceRepository;
- DeviceServiceImp(DeviceRepository deviceRepository) {
+ UserRepository userRepository ;
+ DeviceServiceImp(DeviceRepository deviceRepository ,  UserRepository userRepository ) {
   this.deviceRepository = deviceRepository;
+  this.userRepository = userRepository ;
  }
 
 
  @Override
- public Device addDevice(Device device) {
+ public Device addDevice( String username , Device device) {
+  User user = userRepository.findUserByUsername(username) ;
+  device.setUser(user);
   return deviceRepository.save(device);
  }
 
@@ -58,5 +62,10 @@ public class DeviceServiceImp implements IServiceDevice {
  @Override
  public Device findById(int id) {
   return deviceRepository.findById(id).orElse(null);
+ }
+
+ @Override
+ public List<Device> findAllByUserUsername(String username) {
+  return deviceRepository.findAllByUserUsername(username);
  }
 }
