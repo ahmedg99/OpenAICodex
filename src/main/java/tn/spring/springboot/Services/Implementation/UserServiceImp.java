@@ -26,8 +26,9 @@ import java.util.List;
 @Service
 @Slf4j
 public class UserServiceImp implements IServiceUser , UserDetailsService {
-
+ @Autowired
  UserRepository userRepository ;
+ @Autowired
  RoleRepository roleRepository ;
  @Autowired
  PasswordEncoder passwordEncoder ;
