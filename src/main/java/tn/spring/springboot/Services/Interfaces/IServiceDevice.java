@@ -7,10 +7,11 @@ import java.util.List;
 
 public interface IServiceDevice {
 
-    Device addDevice(Device device) ;
+    Device addDevice( String username,Device device) ;
     Page<Device> getAllDevices(int offset , int pageSize);
     Device updateDevice(int id , Device device) ;
     Device findById(int id ) ;
+    List<Device> findAllByUserUsername(String username) ;
 
 
 

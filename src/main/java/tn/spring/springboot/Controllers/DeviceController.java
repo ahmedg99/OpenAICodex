@@ -12,6 +12,7 @@ import tn.spring.springboot.entities.Role;
 import tn.spring.springboot.entities.User;
 
 import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/device")
 @RestController
@@ -19,13 +20,16 @@ public class DeviceController {
 
     @Autowired
     IServiceDevice iServiceDevice ;
+    @Autowired
+    IServiceUser serviceUser ;
 
 
     @PostMapping("/add")
     @ResponseBody
-    public ResponseEntity<Device> addRole(@RequestBody Device device ) {
+    public ResponseEntity<Device> addRole(@RequestBody Device device , @RequestHeader("AUTHORIZATION") String header ) {
+        String username = serviceUser.getusernamefromtoken(header);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/device/add").toUriString());
-        return ResponseEntity.created(uri).body(iServiceDevice.addDevice(device));
+        return ResponseEntity.created(uri).body(iServiceDevice.addDevice(username,device));
     }
 
 
@@ -48,6 +52,12 @@ public class DeviceController {
         Device updatedDevice = iServiceDevice.updateDevice(id, device);
         return ResponseEntity.ok(updatedDevice);
     }
+    @GetMapping("/retrieveAllByUser")
+    List<Device> retrieveAllByUser(@RequestHeader("AUTHORIZATION") String header){
+        String username = serviceUser.getusernamefromtoken(header);
+        return  iServiceDevice.findAllByUserUsername(username);
+    }
+
 
 
 }

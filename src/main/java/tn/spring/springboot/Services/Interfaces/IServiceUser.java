@@ -25,4 +25,6 @@ public interface IServiceUser {
     User updateUser(int id , User user ) ;
     void addRoleToUser(String username , String roleName ) ;
     User getUser(String username) ;
+    public String getusernamefromtoken(String header) ;
+
 }
