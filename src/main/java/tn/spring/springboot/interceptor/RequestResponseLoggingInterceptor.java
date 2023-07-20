@@ -33,6 +33,7 @@ public class RequestResponseLoggingInterceptor implements ClientHttpRequestInter
     {
         if (log.isDebugEnabled())
         {
+
             log.debug("===========================request begin================================================");
             log.debug("URI         : {}", request.getURI());
             log.debug("Method      : {}", request.getMethod());

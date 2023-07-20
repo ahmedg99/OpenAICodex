@@ -8,21 +8,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tn.spring.springboot.Services.Implementation.FileLocationService;
 import tn.spring.springboot.Services.Interfaces.IServiceUser;
+import tn.spring.springboot.entities.Image;
 import tn.spring.springboot.entities.Role;
 import tn.spring.springboot.entities.User;
 
 import javax.management.RuntimeErrorException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -40,6 +48,8 @@ public class UserController {
 
     @Autowired
     IServiceUser serviceUser ;
+    @Autowired
+    FileLocationService iFileLocationService ;
 
 
     @GetMapping(value = "/getAllUsers")
@@ -53,12 +63,35 @@ public class UserController {
     public Page<User> getAllUsers(@PathVariable int offset , @PathVariable int pageSize) {
         return serviceUser.getAllUsers(offset, pageSize);
     }
-
-    @PostMapping("/add")
+    @GetMapping(value = "/getUserByUsername/{username}")
     @ResponseBody
-    public ResponseEntity<User> addUser(@RequestBody User user ) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/add").toUriString());
-        return ResponseEntity.created(uri).body(serviceUser.createUser(user));
+    public User getAllUsers(@PathVariable String username) {
+        return serviceUser.getUser(username);
+    }
+
+
+    @PostMapping(value = "/add" ,  consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public ResponseEntity<?> addUser( @RequestParam String name ,
+                                      @RequestParam String username ,
+                                      @RequestParam String password,
+                                      @RequestParam String email,
+                                      @RequestParam List<String> roles,
+                                      @RequestBody() MultipartFile image ) throws Exception {
+
+        // add image
+        try {
+            Image savedImage = iFileLocationService.save(image.getBytes(), image.getOriginalFilename());
+            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/add").toUriString());
+            return ResponseEntity.created(uri).body(serviceUser.createUser(name, username,password,email,roles, savedImage));
+        } catch (Exception e) {
+            return ResponseEntity.ok().body("erro : " + e.getMessage());
+
+        }
+
+
+
+
     }
 
 
@@ -121,4 +154,5 @@ public class UserController {
 
 
 
-}
+
+    }

@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tn.spring.springboot.Services.Interfaces.IServiceUser;
+import tn.spring.springboot.entities.Image;
 import tn.spring.springboot.entities.Role;
 import tn.spring.springboot.entities.User;
 import tn.spring.springboot.repositories.RoleRepository;
@@ -65,9 +66,31 @@ public class UserServiceImp implements IServiceUser , UserDetailsService {
  }
 
  @Override
- public User createUser(User user) {
-  log.info("saving new user {} to the database" , user.getUsername());
-  user.setPassword(passwordEncoder.encode(user.getPassword()));
+ public User createUser( String name ,
+                         String username ,
+                         String password,
+                         String email,
+                         List<String> roles,
+                         Image image ) {
+
+  User user = new User() ;
+  Collection<Role> roleslist  = new ArrayList<>() ;
+  roles.forEach(role -> {
+   Role entredRole = roleRepository.findRoleByRoleName(role) ;
+   if(entredRole!=null)
+   roleslist.add(entredRole);
+   else {
+    throw new RuntimeException("role entred not found ") ;
+   }
+  });
+  user.setName(name);
+  user.setUsername(username);
+  user.setPassword(passwordEncoder.encode(password));
+  user.setEmail(email);
+  user.setRoles(roleslist);
+  user.setImage(image);
+
+
   return userRepository.save(user);
  }
 

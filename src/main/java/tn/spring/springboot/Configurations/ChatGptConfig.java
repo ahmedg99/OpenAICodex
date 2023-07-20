@@ -28,4 +28,5 @@ public class ChatGptConfig {
         restTemplate.setRequestFactory(new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()));
         return restTemplate;
     }
+
 }

@@ -3,6 +3,7 @@ package tn.spring.springboot.Security.Filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -30,16 +32,21 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         this.authenticationManager = authenticationManager;
     }
 
-
+    @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        log.info("Username is {}.", username);
-        log.info("Password is hidden.");
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
-                password);
-        return authenticationManager.authenticate(authenticationToken);
+
+
+        ObjectMapper mapper = new ObjectMapper();
+
+            tn.spring.springboot.entities.User user =    mapper.readValue(request.getInputStream(), tn.spring.springboot.entities.User.class);
+            String username = user.getUsername();
+            String password = user.getPassword();
+            log.info("Username is {}.", username);
+            log.info("Password is hidden." );
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
+                    password);
+            return authenticationManager.authenticate(authenticationToken);
     }
 
     @Override
@@ -62,14 +69,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
              Map<String , String> tokens = new HashMap<>();
             tokens.put("access_token", access_token);
             tokens.put("refresh_token", refresh_token);
-
             response.setContentType("application/json");
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
     }
-
-
-
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         super.unsuccessfulAuthentication(request, response, failed);

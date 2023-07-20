@@ -3,6 +3,7 @@ package tn.spring.springboot.entities;
 
 import lombok.Data;
 import lombok.ToString;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -23,5 +24,8 @@ public class User implements Serializable {
     private String email ;
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles ;
-
+    @OneToMany(cascade =CascadeType.ALL , mappedBy="user")
+    private Collection<Device> devices;
+    @OneToOne
+    Image image;
 }
