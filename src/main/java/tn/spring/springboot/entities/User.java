@@ -6,7 +6,9 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @ToString
@@ -28,4 +30,11 @@ public class User implements Serializable {
     private Collection<Device> devices;
     @OneToOne
     Image image;
+    public User() {
+
+    }
+
+
+
+
 }
