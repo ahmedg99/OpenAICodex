@@ -26,4 +26,6 @@ public class Device implements Serializable {
     private User user ;
 
 
+
+
 }

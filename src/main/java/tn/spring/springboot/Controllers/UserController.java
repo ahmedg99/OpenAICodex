@@ -146,10 +146,11 @@ public class UserController {
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(),error);
             }
-        } else {
+         } else {
             throw new  RuntimeException("refresh token is missing") ;
         }
     }
+
 
 
 
