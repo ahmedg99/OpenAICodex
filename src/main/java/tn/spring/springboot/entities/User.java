@@ -30,6 +30,7 @@ public class User implements Serializable {
     private Collection<Device> devices;
     @OneToOne
     Image image;
+    private String token ;
     public User() {
 
     }

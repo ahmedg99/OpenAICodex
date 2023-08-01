@@ -52,10 +52,10 @@ public class DeviceController {
         Device updatedDevice = iServiceDevice.updateDevice(id, device);
         return ResponseEntity.ok(updatedDevice);
     }
-    @GetMapping("/retrieveAllByUser")
-    List<Device> retrieveAllByUser(@RequestHeader("AUTHORIZATION") String header){
+    @GetMapping("/retrieveAllByUser/{offset}/{pageSize}")
+    Page<Device> retrieveAllByUser(@RequestHeader("AUTHORIZATION") String header , @PathVariable int offset , @PathVariable int pageSize){
         String username = serviceUser.getusernamefromtoken(header);
-        return  iServiceDevice.findAllByUserUsername(username);
+        return  iServiceDevice.findAllByUserUsername(username , offset , pageSize);
     }
 
 

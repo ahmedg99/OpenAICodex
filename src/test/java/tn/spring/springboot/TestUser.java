@@ -24,16 +24,13 @@ import static org.junit.Assert.assertEquals;
 public class TestUser {
     @Mock
     UserRepository userRepository;
-
-
     @InjectMocks
     UserServiceImp iServiceUser;
-
     @Autowired
     IServiceUser serviceUser ;
 
     @Test
-    public void testGetAllUsers() throws Exception {
+    public void testGetAllUsers()  {
         List<User> users =  iServiceUser.getAllUsers() ;
         Assertions.assertNotNull(users);
     }
@@ -59,9 +56,7 @@ public class TestUser {
         System.out.println("result : " + result.getContent().size());
         // Assertions
         assertEquals(fakePage.getContent(),result.getContent());
-
      }
-
 
      @Test
      @Order(4)
