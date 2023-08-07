@@ -46,7 +46,6 @@ public class DeviceController {
     }
 
 
-
     @PatchMapping("/update/{id}")
     public ResponseEntity<Device> updateDevice(@PathVariable int id, @RequestBody Device device) {
         Device updatedDevice = iServiceDevice.updateDevice(id, device);
