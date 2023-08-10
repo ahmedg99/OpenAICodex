@@ -2,17 +2,17 @@ package tn.spring.springboot.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tn.spring.springboot.Services.Interfaces.IServiceAlram;
+import tn.spring.springboot.Services.Interfaces.IServiceCredential;
 import tn.spring.springboot.Services.Interfaces.IServiceDevice;
 import tn.spring.springboot.Services.Interfaces.IServiceUser;
+import tn.spring.springboot.entities.Alarm;
 import tn.spring.springboot.entities.Device;
-import tn.spring.springboot.entities.Role;
-import tn.spring.springboot.entities.User;
 
-import java.net.URI;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @RequestMapping("/device")
 @RestController
@@ -21,16 +21,15 @@ public class DeviceController {
     @Autowired
     IServiceDevice iServiceDevice ;
     @Autowired
+    IServiceAlram iServiceAlram ;
+    @Autowired
     IServiceUser serviceUser ;
 
+    @Autowired
+    IServiceCredential iServiceCredential ;
 
-    @PostMapping("/add")
-    @ResponseBody
-    public ResponseEntity<Device> addRole(@RequestBody Device device , @RequestHeader("AUTHORIZATION") String header ) {
-        String username = serviceUser.getusernamefromtoken(header);
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/device/add").toUriString());
-        return ResponseEntity.created(uri).body(iServiceDevice.addDevice(username,device));
-    }
+
+
 
 
     @GetMapping(value = "/getAllDevices/{offset}/{pageSize}")
@@ -56,7 +55,43 @@ public class DeviceController {
         String username = serviceUser.getusernamefromtoken(header);
         return  iServiceDevice.findAllByUserUsername(username , offset , pageSize);
     }
+    @PostMapping("/add")
+    public ResponseEntity<?> add(@RequestBody Device device, @RequestHeader("AUTHORIZATION") String header) {
+
+        boolean exist = false;
+        String username = serviceUser.getusernamefromtoken(header);
+        //  if(iServiceAlram.existbyName())
+        int i = 0;
+        while (i < device.getAlarms().size() && !exist) {
+            Alarm alarm = device.getAlarms().get(i);
+            if (iServiceAlram.existbyName(alarm.getName())) {
+                exist = true;
+            }
+            i++;
+        }
+
+        if(iServiceCredential.existbyName(device.getCredential().getUsername()))     {
+            exist =true ;
+        }
+            if (exist == false) {
+                Device addedDevice = iServiceDevice.addDevice(username, device);
+                return new ResponseEntity<>(addedDevice, HttpStatus.CREATED);
+            } else return new ResponseEntity<>("alarms name is already existing " , HttpStatus.BAD_REQUEST);
 
 
 
+    }
+
+
+    @GetMapping("/findDevicesByModelAndUser/{model}/{offset}/{pageSize}")
+    Page<Device> findDevicesByModelAndUser(@RequestHeader("AUTHORIZATION") String header , @PathVariable int offset , @PathVariable int pageSize , @PathVariable String model){
+        String username = serviceUser.getusernamefromtoken(header);
+        return  iServiceDevice.findDevicesByModelAndUser(username , model , offset , pageSize);
+    }
+
+
+    @GetMapping("/findDevicesById/{id}")
+    Device findDevicesById(@PathVariable int id){
+        return  iServiceDevice.findById(id);
+    }
 }

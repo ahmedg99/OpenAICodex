@@ -12,6 +12,7 @@ public interface IServiceDevice {
     Device updateDevice(int id , Device device) ;
     Device findById(int id ) ;
     Page<Device>  findAllByUserUsername(String username ,  int offset , int pageSize) ;
+    Page<Device>  findDevicesByModelAndUser(String username ,  String model , int offset , int pageSize ) ;
 
 
 
