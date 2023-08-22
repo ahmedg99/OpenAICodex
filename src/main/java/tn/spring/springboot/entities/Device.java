@@ -13,11 +13,9 @@ import java.util.List;
 @ToString
 @Data
 @Table(name = "Device")
-
 public class Device implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private int deviceId;
     private String label ;
     @Enumerated(EnumType.STRING)
@@ -28,15 +26,9 @@ public class Device implements Serializable {
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
-
     @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Alarm> alarms;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "credential_id")
     private Credential credential;
-
-
-
-
 }

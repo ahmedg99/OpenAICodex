@@ -13,4 +13,8 @@ import java.util.List;
 public interface DeviceRepository extends JpaRepository<Device,Integer> {
     Page<Device> findAllByUserUsername(String user_username , Pageable pageable) ;
     Page<Device> findAllByModelAndUserUsername(Model model , String user_username , Pageable pageable) ;
+    List<Device> findAllByUserUsername(String user_username) ;
+    List<Device> findAllByModel(Model model) ;
+    void deleteAllByUserUsername(String user_username) ;
+
 }

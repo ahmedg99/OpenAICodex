@@ -6,8 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import tn.spring.springboot.Services.Implementation.ServiceDeviceAIImpl;
-import tn.spring.springboot.entities.Device;
+import tn.spring.springboot.services.Implementation.ServiceDeviceAIImpl;
 import tn.spring.springboot.entities.DeviceAI;
 import tn.spring.springboot.entities.User;
 import tn.spring.springboot.repositories.DeviceAIRepository;
@@ -30,6 +29,29 @@ public class ServiceDeviceAIImplTest {
 
     @InjectMocks
     private ServiceDeviceAIImpl deviceService;
+
+    @Test
+    public void testGetAllDevicesCopilote() {
+        // Given
+        List<DeviceAI> list = new ArrayList<>();
+        DeviceAI device1 = new DeviceAI("Model X", "10.12345", "20.54321", new User());
+        DeviceAI device2 = new DeviceAI("Model Y", "30.6789", "40.9876", new User());
+        DeviceAI device3 = new DeviceAI("Model Z", "50.12345", "60.54321", new User());
+        list.add(device1);
+        list.add(device2);
+        list.add(device3);
+
+        // When
+        when(deviceRepository.findAll()).thenReturn(list);
+        List<DeviceAI> devices = deviceService.getAllDevices();
+
+        // Then
+        assertNotNull(devices);
+        assertEquals(3, devices.size());
+        assertEquals("Model X", devices.get(0).getModel());
+        assertEquals("30.6789", devices.get(1).getLongitude());
+        assertEquals("60.54321", devices.get(2).getLatitude());
+    }
 
     @Test
     public void testCreateDevice() {

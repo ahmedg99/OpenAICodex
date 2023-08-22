@@ -7,16 +7,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import tn.spring.springboot.Services.Implementation.ServiceDeviceAIImpl;
+import tn.spring.springboot.services.Implementation.ServiceDeviceAIImpl;
 import tn.spring.springboot.entities.DeviceAI;
 import tn.spring.springboot.entities.User;
 import tn.spring.springboot.repositories.DeviceAIRepository;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
-  import static javafx.beans.binding.Bindings.when;
 import static junit.framework.Assert.assertNotNull;
-import static org.hamcrest.Matchers.any;
 import static org.junit.Assert.assertEquals;
 
 @SpringBootTest
